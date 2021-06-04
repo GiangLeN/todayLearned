@@ -1,0 +1,37 @@
+
+## Open multiple csv files in R
+
+## Define path
+path <- "dir"
+
+## Serach for files with patterns
+files <- list.files(path, pattern = "patterns", recursive=TRUE, full.names=TRUE) ## recursive = search subfolders, full.names = returns all file name
+
+## Open csv files
+list_of_data = lapply(files, read.csv, sep = "\t") ## this is tsv file
+
+library(plyr)
+## Create new data
+all_data = do.call(rbind.fill, list_of_data)
+
+
+## Other refs
+https://stackoverflow.com/questions/21607930/combine-some-csv-files-into-one-different-number-of-columns
+https://stackoverflow.com/questions/57629968/r-comparing-multiple-csv-files-and-adding-in-missing-values-observations
+https://stackoverflow.com/questions/40464407/how-to-combine-multiple-csv-files-with-different-columns-in-r
+https://stackoverflow.com/questions/55012978/subsetting-data-from-multiple-csv-files-with-missing-headings-in-r
+https://stackoverflow.com/questions/28671506/merging-different-size-multiple-csv-files
+https://stackoverflow.com/questions/43858448/how-to-load-and-merge-multiple-csv-files-in-r/43858605
+https://unix.stackexchange.com/questions/437026/merge-multiple-csv-files-with-partially-matching-key-column
+https://unix.stackexchange.com/questions/445361/fixing-a-csv-file-where-some-rows-have-missing-columns
+https://unix.stackexchange.com/questions/293775/merging-contents-of-multiple-csv-files-into-single-csv-file
+https://unix.stackexchange.com/questions/272892/i-need-to-merge-multiple-csv-files-together-side-by-side-with-unequal-number-of
+https://community.rstudio.com/t/combining-csv-files/52781
+https://sscc.wisc.edu/sscc/pubs/DWE/book/2-3-prgm-read-csv-advnc.html
+https://pandas-docs.github.io/pandas-docs-travis/user_guide/merging.html
+https://garthtarr.github.io/meatR/merging.html
+https://www.listendata.com/2019/06/pandas-read-csv.html
+https://osdoc.cogsci.nl/3.2/manual/logging/
+https://stackoverflow.com/questions/14167178/passing-command-line-arguments-to-r-cmd-batch
+
+
