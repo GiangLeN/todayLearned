@@ -16,6 +16,7 @@ all_data = do.call(rbind.fill, list_of_data)
 
 
 ## Other refs
+Key words: r merge multiple csv files fill in missing columns
 https://stackoverflow.com/questions/21607930/combine-some-csv-files-into-one-different-number-of-columns
 https://stackoverflow.com/questions/57629968/r-comparing-multiple-csv-files-and-adding-in-missing-values-observations
 https://stackoverflow.com/questions/40464407/how-to-combine-multiple-csv-files-with-different-columns-in-r
