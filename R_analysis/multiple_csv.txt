@@ -12,14 +12,16 @@ list_of_data = lapply(files, read.csv, sep = "\t") ## this is tsv file
 
 library(plyr)
 ## Create new data
-all_data = do.call(rbind.fill, list_of_data)
+all_data = do.call(rbind.fill, list_of_data) 
+
+## Another option dplyr::rbind_all(list_of_data) ## the R session will be aborted if the list elements are not of the same length.
+
 
 
 ## Other refs
 Key words: r merge multiple csv files fill in missing columns
 https://stackoverflow.com/questions/21607930/combine-some-csv-files-into-one-different-number-of-columns
 https://stackoverflow.com/questions/57629968/r-comparing-multiple-csv-files-and-adding-in-missing-values-observations
-https://stackoverflow.com/questions/40464407/how-to-combine-multiple-csv-files-with-different-columns-in-r
 https://stackoverflow.com/questions/55012978/subsetting-data-from-multiple-csv-files-with-missing-headings-in-r
 https://stackoverflow.com/questions/28671506/merging-different-size-multiple-csv-files
 https://stackoverflow.com/questions/43858448/how-to-load-and-merge-multiple-csv-files-in-r/43858605
