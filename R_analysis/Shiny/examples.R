@@ -21,4 +21,33 @@ server <- function(input, output, session) {
 }
 shinyApp(ui = ui, server = server)
 
+library(phyloseq)
 
+if (interactive()) {
+  
+  ui <- fluidPage(
+    sidebarLayout(
+      sidebarPanel(
+        fileInput("file1", "Choose Phyloseq File", accept = ".rds"),
+        checkboxInput("header", "Header", TRUE)
+      ),
+      mainPanel(
+        tableOutput("contents")
+      )
+    )
+  )
+  
+  server <- function(input, output) {
+    output$contents <- renderPrint({
+      file <- input$file1
+      ext <- tools::file_ext(file$datapath)
+      
+      req(file)
+      validate(need(ext == "rds", "Please upload a csv file"))
+      
+      readRDS(file$datapath)
+    })
+  }
+  
+  shinyApp(ui, server)
+}
