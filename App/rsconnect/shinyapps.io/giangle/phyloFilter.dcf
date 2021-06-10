@@ -1,0 +1,11 @@
+name: phyloFilter
+title:
+username:
+account: giangle
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 4248883
+bundleId: 4699199
+url: https://giangle.shinyapps.io/phyloFilter/
+when: 1623290647.49701
+lastSyncTime: 1623290647.49701
