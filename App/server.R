@@ -2,7 +2,15 @@ library("shiny")
 library("tidyverse")
 library("phyloseq")
 library("BiocManager")
+library("DT")
 options(repos = BiocManager::repositories())
+
+num.decimals <- function(x) {
+  stopifnot(class(x)=="numeric")
+  x <- sub("0+$","",x)
+  x <- sub("^.+[.]","",x)
+  nchar(x)
+}
 
 
 function(input, output, session) {
@@ -83,11 +91,17 @@ function(input, output, session) {
         
       )
       
-      output$taxaTable <- renderTable(
+      deciPlace <- reactive({
+        num.decimals(input$abunTaxa)
+      })
+
+      output$taxaTable <- DT::renderDataTable({
         
-        prevaContamFreeTable ()
-        
-      )
+        DT::datatable(prevaContamFreeTable(), options = list(orderClasses = TRUE)) %>%
+          formatRound(columns='Prevalence_percentage', 2) %>%
+          formatRound(column ='Abundance_percentage', deciPlace())
+      
+      })
       
       saveData <- reactive ({
         

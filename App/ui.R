@@ -2,6 +2,7 @@ library("shiny")
 library("tidyverse")
 library("phyloseq")
 library("BiocManager")
+library("DT")
 options(repos = BiocManager::repositories())
 
 taxLevel <- c("domain","phylum", "class", "order")
@@ -29,7 +30,7 @@ fluidPage(
     textOutput("summary"),
     textOutput("filterSummary"),
     plotOutput("taxaFilter", height=1000),
-    tableOutput("taxaTable")
+    DT::dataTableOutput("taxaTable")
     
   )
   
