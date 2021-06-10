@@ -15,5 +15,7 @@
 # DS Store
 .DS_Store
 
+## phyloFilter dcf
+App/rsconnect/*
 
 
