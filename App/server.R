@@ -21,7 +21,7 @@ function(input, output, session) {
     ext <- tools::file_ext(file$datapath)
     
     req(file)
-    validate(need(ext == "rds", "Please upload a rds file"))
+    validate(need(ext == c("rds","RDS"), "Please upload a rds file"))
     
     readRDS(file$datapath)
     
@@ -29,16 +29,22 @@ function(input, output, session) {
   
   output$inPs <- renderPrint({
     
-    if (is.null(ps())){
-      print ("Null")
+    if (!is.null(ps())){
       
-    } else {
-      ## Filter out controls
-      fltps.noContrl <- reactive({
+      ## Filter Controls from pipeline 
+      if("Sample_or_Control" %in% colnames(sample_data(ps()))) {
         
-        subset_samples(ps(), Sample_or_Control != "Control")
+        fltps.noContrl <- reactive({
+          ## Filter out controls
+          subset_samples(ps(), Sample_or_Control != "Control")
+          
+        })
         
-      })
+      } else {
+        
+        fltps.noContrl <- reactive(ps())
+      
+      }
       
       ## Compute number of sample for each ASV, store as data.frame
       abunfltdf <- reactive({
@@ -87,7 +93,7 @@ function(input, output, session) {
       
       output$filterSummary <- renderText(
         
-        paste0("ASVs with number of reads below ", ceiling(input$abunTaxa * totalReads() / 100), " (", input$abunTaxa, " %) and appeared in less than " , ceiling(input$prevaTaxa * nsamples(fltps.noContrl()) / 100), " samples (", input$prevaTaxa, " %)  were filtered out. There are ", nrow(prevaContamFreeTable ()), " ASVs left (", (ntaxa(fltps.noContrl()) - nrow(prevaContamFreeTable ())) / ntaxa(fltps.noContrl()) *100, " % was removed)." )
+        paste0("ASVs with number of reads below ", ceiling(input$abunTaxa * totalReads() / 100), " (", input$abunTaxa, " %) and appeared in less than " , ceiling(input$prevaTaxa * nsamples(fltps.noContrl()) / 100), " samples (", input$prevaTaxa, " %)  were filtered out. There are ", nrow(prevaContamFreeTable ()), " ASVs left (", round((ntaxa(fltps.noContrl()) - nrow(prevaContamFreeTable ())) / ntaxa(fltps.noContrl()) *100, digits = 2), " % was removed)." )
         
       )
       
@@ -103,30 +109,68 @@ function(input, output, session) {
       
       })
       
-      saveData <- reactive ({
+      if (input$excludeTaxa==""){
         
-        keeptaxa <- prevaContamFreeTable()$ASVs
-        prune_taxa(keeptaxa, fltps.noContrl())
+        saveData <- reactive ({
+          
+          keeptaxa <- prevaContamFreeTable()$ASVs
+          prune_taxa(keeptaxa, fltps.noContrl())
+          
+        })
         
-      })
-      
+      } else {
+        
+        saveDataTax <- reactive({
+          
+          removeTaxa <- reactive({
+            
+            prevaContamFreeTable() %>% filter(!grepl(input$excludeTaxa, get(input$taxaLevel))) %>% select(ASVs)
+          
+          })
+          
+          keepTaxa <- removeTaxa()$ASVs
+          
+          prune_taxa(keepTaxa, fltps.noContrl())
+          
+        })
+        
+
+        output$test <- renderPrint(
+          
+          saveDataTax()
+                            
+        )
+        
+      }
+
       # Download csv abundance table
       output$downloadTable <- downloadHandler(
+        
         filename = function() {
+          
           paste(input$name, "table.csv", sep = "_")
+          
         },
+        
         content = function(file) {
+          
           write.csv(prevaContamFreeTable(), file)
+          
         }
       )
       
       # Download filtered files
       output$downloadData <- downloadHandler(
+        
         filename = function() {
+          
           paste(input$name, "filtered.rds", sep = "_")
+          
         },
         content = function(file) {
+          
           saveRDS(saveData(), file)
+          
         }
       )
     }
