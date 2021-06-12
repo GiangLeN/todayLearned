@@ -1,0 +1,27 @@
+
+## https://statisticsglobe.com/compare-vectors-and-find-differences-in-r
+
+vec1 <- c("A", "B", "C")
+vec2 <- c("A", "B", "D")
+
+## Check identical
+identical(vec1, vec2)
+
+## Check individual vector element is the same
+vec1 == vec2
+
+## Check 1 vector vs the other
+vec1 %in% vec2
+
+## Check common in both vectors
+intersect(vec1, vec2)
+
+## Check elements exists only in the first and not the other
+setdiff(vec1, vec2)
+
+## https://statisticsglobe.com/add-column-to-data-frame-in-r
+
+## Create data frame from vector
+data <- data.frame(x1 = vec1, x2 = vec2)
+
+
