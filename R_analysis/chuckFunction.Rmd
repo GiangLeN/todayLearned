@@ -1,0 +1,35 @@
+---
+title: "Test"
+author: "Giang"
+date: "6/14/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, f2c}
+F2C <- function(x) {
+  <<check-arg>>
+  <<convert>>
+}
+```
+
+First, we check if the input value is numeric:
+
+```{r, check-arg, eval=FALSE}
+  if (!is.numeric(x)) stop("The input must be numeric!")
+```
+
+Then we do the actual conversion:
+
+```{r, convert, eval=FALSE}
+  (x - 32) * 5/ 9
+```
+
+```{r}
+
+F2C(370)
+
+```
