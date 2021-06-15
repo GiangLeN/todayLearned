@@ -33,3 +33,42 @@ Then we do the actual conversion:
 F2C(370)
 
 ```
+
+Here is a code chunk that is not evaluated:
+
+```{r, chunk-one, eval=FALSE}
+1 + 1
+2 + 2
+```
+
+Now we actually evaluate it:
+
+```{r, chunk-one, eval=TRUE}
+```
+
+Possible to reuse chucks. First one is not running. Second one is.
+But avoid this as save files might be replaced.
+
+```{r chunk-a, ref.label=c('chunk-c', 'chunk-b')}
+```
+
+```{r chunk-b}
+# this is the chunk b
+1 + 1
+```
+
+```{r chunk-c}
+# this is the chunk c
+2 + 2
+```
+In other words, chunk-a is essentially this:
+
+
+```{r chunk-a}
+# this is the chunk c
+2 + 2
+# this is the chunk b
+1 + 1
+```
+
+The chunk option ref.label takes a vector of chunk labels to retrieve the content of these chunks. This is a very flexible way of reorganizing code chunks in a document without resorting to cut-and-paste. It does not matter if the code chunks referenced are before or after the code chunk that uses ref.label. An early code chunk can reference a later chunk.
