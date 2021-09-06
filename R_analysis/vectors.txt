@@ -25,3 +25,11 @@ setdiff(vec1, vec2)
 data <- data.frame(x1 = vec1, x2 = vec2)
 
 
+## Add columns
+data$col1 <- vec1
+data["col2"] <- vec2
+data <- cbind(data, new_col = vec)
+
+
+## https://www.datasciencemadesimple.com/join-in-r-merge-in-r/
+## https://www.statology.org/r-append-to-data-frame/
