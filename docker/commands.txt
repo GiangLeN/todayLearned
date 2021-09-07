@@ -1,0 +1,7 @@
+# List images
+docker image ls
+
+# Remove image
+docker image rm <image_name>
+
+
