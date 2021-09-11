@@ -4,4 +4,5 @@ docker image ls
 # Remove image
 docker image rm <image_name>
 
-
+# Execute on running image
+docker exec -it <image_name> /bin/bash
