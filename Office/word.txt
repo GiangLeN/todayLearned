@@ -1,0 +1,12 @@
+
+# Search for a first Capital letter
+[C]{1,}
+
+# Search for a Whole Capital letter
+[A-Z]{2,}
+
+# Search for 4 numbers together
+[0-9]{4}
+
+https://cybertext.wordpress.com/2020/10/08/word-find-3-digit-numbers/
+https://www.datanumen.com/blogs/2-quick-ways-find-words-initial-letters-capitalized-word-document/
