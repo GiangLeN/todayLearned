@@ -1,0 +1,2 @@
+# Replace from "x" onward
+'s/_/-/"x"g'
