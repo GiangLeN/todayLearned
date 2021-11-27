@@ -1,0 +1,14 @@
+# Rename space from files
+for i in *\ *; do
+  "$f" "${f// /_}" # // search "space" replace underscore
+done
+
+# Rename .fastq_( to _
+for f in *\(* ; do
+  mv "$f" "${f//\.fastq_\(/_}" # 
+done
+
+# Rename ) to .fastq
+for f in *\)* ; do
+  mv $f "${f//\)/.fastq}"
+done
