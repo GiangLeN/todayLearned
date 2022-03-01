@@ -40,13 +40,13 @@ File name should be same as the zip file with .md5 at the end.
 
 Use Filezilla to upload the raw and md5 files:
 
-`
+```
 Host: webin2.ebi.ac.uk  
-
 Username: Webin-xxxx  
-
 Password: *password12345678*  
-`
+
+```
+
 Just drag files to the ENA server.  
 
 Note: Sometimes connection lost and so careful of upload files.
