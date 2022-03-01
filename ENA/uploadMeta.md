@@ -18,13 +18,11 @@ eg: human feces metagenome
 *sample_title* : Title of the sample.  
 *sample_description* : Description of the samples.  
 
-Save the file as tab seperated file.  
-
-Upload to ENA
+Save the file as tab seperated file and upload to ENA  
 
 ## 3. Submit reads
 
-Need to upload the files and md5sum before upload the complete spreadsheet.
+Need to upload the raw and md5sum files before upload the complete spreadsheet.
 
 ### Zip files
 Files need to be zipped in gz format.
@@ -54,8 +52,8 @@ Makes sure all files are there.
 
 ### Upload spreadsheet
 
-Sample: ERS*** (Use generated sample from above)  
-Study: ERP*** (Use generated study from above)  
+sample: ERS*** (Use generated sample from above)  
+study: ERP*** (Use generated study from above)  
 library_name: Same as sample_title from above  
 forward_xxxxx_name: The name of the file  
 xxxx_file_md5: The 32 character strings from md5  
