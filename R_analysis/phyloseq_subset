@@ -1,0 +1,61 @@
+library(phyloseq)
+
+# Load in phyloseq
+ps <- readRDS("phyloseq.rds")
+
+# Load in list of interest (no header)
+want <- read.csv("interest", header = FALSE)
+want2 <- want$V1
+
+# Subset samples
+ps2 <- prune_samples(want2, ps)
+
+# Remove empty taxa
+ps3 = prune_taxa(taxa_sums(ps2) > 0, ps2)
+
+# Write dna seq to csv
+write.csv(refseq(ps3), "asv_dna.csv")
+
+# Read back csv
+dna <- read.csv("asv_dna.csv", row.names = 1)
+
+# Extract otu table
+otu <- otu_table(ps3)
+
+# Rename ASV
+colnames(otu) <- dna$x
+
+# Rename sample
+rownames(otu) <- gsub("$","_c",rownames(otu))
+
+# Convert to matrix
+otu2 <- as.matrix(otu)
+
+# Save as rds
+saveRDS(otu2, "seqtab_nochim_combat.rds")
+
+# Woring with seqtab_nochim
+seqtab <- readRDS("seqtab_nochim.RDS")
+
+# Filter samples from list
+seqtab2 <- seqtab[rownames(seqtab) %in% want2,]
+
+# Rename samples
+rownames(seqtab2) <- gsub("$","_c",rownames(seqtab2))
+
+# Save
+saveRDS(seqtab3, "seqtab_nochim_janine.rds")
+
+
+seqtabBase <- seqtabBase[rownames(seqtabBase) %in% want2,]
+rownames(seqtabBase) <- gsub("$","_q",rownames(seqtabBase))
+
+
+
+
+
+
+
+
+
+
