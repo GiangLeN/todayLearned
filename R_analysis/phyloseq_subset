@@ -46,9 +46,35 @@ rownames(seqtab2) <- gsub("$","_c",rownames(seqtab2))
 # Save
 saveRDS(seqtab3, "seqtab_nochim_janine.rds")
 
+# Load in quick
+quick <- readRDS("seqtab_nochim_quick.rds")
+want <- read.csv("interest", header = F)
+want2 <- want$V1
+quick2 <- quick[rownames(quick) %in% want2,]
+rownames(quick2) <- gsub("$","_q",rownames(quick2))
 
-seqtabBase <- seqtabBase[rownames(seqtabBase) %in% want2,]
-rownames(seqtabBase) <- gsub("$","_q",rownames(seqtabBase))
+combat <- readRDS("seqtab_nochim_combat.rds")
+quick_combat <- mergeSequenceTables(quick2, combat)
+
+janine <- readRDS("seqtab_nochim_janine.rds")
+quick_combat_janine <- mergeSequenceTables(quick_combat, janine)
+
+ncol(quick_combat_janine) # 10092
+ncol(quick) # 4002
+ncol(combat) # 2133
+ncol(janine) # 5569
+
+mergetab_nochim <- removeBimeraDenovo(quick_combat_janine, method="consensus", multithread=TRUE, verbose=TRUE)
+# Identified 2850 bimeras out of 10092 input sequences.
+ncol(mergetab_nochim) # 7242
+
+mergetab_nochim2 <- removeBimeraDenovo(quick_combat_janine, method="pooled", multithread=TRUE, verbose=TRUE)
+ncol(mergetab_nochim2) # 8414
+
+mergetab_nochim3 <- removeBimeraDenovo(quick_combat_janine, method="per-sample", multithread=TRUE, verbose=TRUE)
+ncol(mergetab_nochim3) # 7260
+
+taxa_silva <- assignTaxonomy(mergetab_nochim, "../taxDB/silva_nr99_v138_wSpecies_train_set.fa.gz", tryRC=TRUE, multithread = TRUE)
 
 
 
