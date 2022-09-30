@@ -89,7 +89,15 @@ ps <- phyloseq(otu_table(mergetab_nochim, taxa_are_rows=FALSE),
                sample_data(meta),
                tax_table(as.matrix(dftaxid)))
 
+dna <- Biostrings::DNAStringSet(taxa_names(ps))
 
+names(dna) <- taxa_names(ps)
+ps <- merge_phyloseq(ps, dna)
+taxa_names(ps) <- paste0("ASV", seq(ntaxa(ps)))
+
+fltps <- prune_taxa(taxa_sums(ps) > 0, ps)
+
+fltps <- prune_samples(sample_sums(fltps) > 0, fltps)
 
 
 
