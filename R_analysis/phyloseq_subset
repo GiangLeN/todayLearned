@@ -76,6 +76,18 @@ ncol(mergetab_nochim3) # 7260
 
 taxa_silva <- assignTaxonomy(mergetab_nochim, "../taxDB/silva_nr99_v138_wSpecies_train_set.fa.gz", tryRC=TRUE, multithread = TRUE)
 
+dftaxid <- as.data.frame(unlist(taxa_silva))
+
+## Format the header
+dftaxid <- dftaxid %>% rownames_to_column("Seq") %>% dplyr::select(Seq,Kingdom,Phylum,Class,Order,Family,Genus) %>% mutate(Kingdom=paste0("k__",Kingdom), Phylum=paste0("p__",Phylum), Class=paste0("c__",Class), Order=paste0("o__", gsub(" ","_",Order)), Family=paste0("f__",gsub(" ","_",Family)), Genus=paste0("g__", gsub(" ","_",Genus)))
+
+rownames(dftaxid) <- dftaxid$Seq
+dftaxid$Seq <- NULL
+
+meta <- read.csv("new_meta_kit.csv", sep = ";", row.names = 1)
+ps <- phyloseq(otu_table(mergetab_nochim, taxa_are_rows=FALSE),
+               sample_data(meta),
+               tax_table(as.matrix(dftaxid)))
 
 
 
