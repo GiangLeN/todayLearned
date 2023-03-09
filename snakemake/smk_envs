@@ -1,0 +1,11 @@
+
+
+Faster to install via mamba
+
+```
+conda create --name snakemake -c conda-forge mamba
+
+# It solves environment faster with bioconda as the environment
+mamba install -c conda-forge -c bioconda snakemake
+```
+
