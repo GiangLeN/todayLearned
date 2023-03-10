@@ -1,0 +1,107 @@
+library(phyloseq)
+
+# Load in phyloseq
+ps <- readRDS("phyloseq.rds")
+
+# Load in list of interest (no header)
+want <- read.csv("interest", header = FALSE)
+want2 <- want$V1
+
+# Subset samples
+ps2 <- prune_samples(want2, ps)
+
+# Remove empty taxa
+ps3 = prune_taxa(taxa_sums(ps2) > 0, ps2)
+
+# Write dna seq to csv
+write.csv(refseq(ps3), "asv_dna.csv")
+
+# Read back csv
+dna <- read.csv("asv_dna.csv", row.names = 1)
+
+# Extract otu table
+otu <- otu_table(ps3)
+
+# Rename ASV
+colnames(otu) <- dna$x
+
+# Rename sample
+rownames(otu) <- gsub("$","_c",rownames(otu))
+
+# Convert to matrix
+otu2 <- as.matrix(otu)
+
+# Save as rds
+saveRDS(otu2, "seqtab_nochim_combat.rds")
+
+# Woring with seqtab_nochim
+seqtab <- readRDS("seqtab_nochim.RDS")
+
+# Filter samples from list
+seqtab2 <- seqtab[rownames(seqtab) %in% want2,]
+
+# Rename samples
+rownames(seqtab2) <- gsub("$","_c",rownames(seqtab2))
+
+# Save
+saveRDS(seqtab3, "seqtab_nochim_janine.rds")
+
+# Load in quick
+quick <- readRDS("seqtab_nochim_quick.rds")
+want <- read.csv("interest", header = F)
+want2 <- want$V1
+quick2 <- quick[rownames(quick) %in% want2,]
+rownames(quick2) <- gsub("$","_q",rownames(quick2))
+
+combat <- readRDS("seqtab_nochim_combat.rds")
+quick_combat <- mergeSequenceTables(quick2, combat)
+
+janine <- readRDS("seqtab_nochim_janine.rds")
+quick_combat_janine <- mergeSequenceTables(quick_combat, janine)
+
+ncol(quick_combat_janine) # 10092
+ncol(quick) # 4002
+ncol(combat) # 2133
+ncol(janine) # 5569
+
+mergetab_nochim <- removeBimeraDenovo(quick_combat_janine, method="consensus", multithread=TRUE, verbose=TRUE)
+# Identified 2850 bimeras out of 10092 input sequences.
+ncol(mergetab_nochim) # 7242
+
+mergetab_nochim2 <- removeBimeraDenovo(quick_combat_janine, method="pooled", multithread=TRUE, verbose=TRUE)
+ncol(mergetab_nochim2) # 8414
+
+mergetab_nochim3 <- removeBimeraDenovo(quick_combat_janine, method="per-sample", multithread=TRUE, verbose=TRUE)
+ncol(mergetab_nochim3) # 7260
+
+taxa_silva <- assignTaxonomy(mergetab_nochim, "../taxDB/silva_nr99_v138_wSpecies_train_set.fa.gz", tryRC=TRUE, multithread = TRUE)
+
+dftaxid <- as.data.frame(unlist(taxa_silva))
+
+## Format the header
+dftaxid <- dftaxid %>% rownames_to_column("Seq") %>% dplyr::select(Seq,Kingdom,Phylum,Class,Order,Family,Genus,Species) %>% mutate(Kingdom=paste0("k__",Kingdom), Phylum=paste0("p__",Phylum), Class=paste0("c__",Class), Order=paste0("o__", gsub(" ","_",Order)), Family=paste0("f__",gsub(" ","_",Family)), Genus=paste0("g__", gsub(" ","_",Genus)), Species=paste0("s__", gsub(" ","_",Species)))
+
+rownames(dftaxid) <- dftaxid$Seq
+dftaxid$Seq <- NULL
+
+meta <- read.csv("new_meta_kit.csv", sep = ";", row.names = 1)
+ps <- phyloseq(otu_table(mergetab_nochim, taxa_are_rows=FALSE),
+               sample_data(meta),
+               tax_table(as.matrix(dftaxid)))
+
+dna <- Biostrings::DNAStringSet(taxa_names(ps))
+
+names(dna) <- taxa_names(ps)
+ps <- merge_phyloseq(ps, dna)
+taxa_names(ps) <- paste0("ASV", seq(ntaxa(ps)))
+
+fltps <- prune_taxa(taxa_sums(ps) > 0, ps)
+
+fltps <- prune_samples(sample_sums(fltps) > 0, fltps)
+
+
+
+
+
+
+

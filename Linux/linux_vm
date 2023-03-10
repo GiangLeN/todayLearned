@@ -1,0 +1,18 @@
+
+If the login shell is /bin/sh activate `bash` by typing 
+
+```
+bash
+```
+
+To change for future login
+
+```
+chsh -s /bin/zsh
+```
+or  
+```
+chsh -s /bin/bash
+```
+
+https://unix.stackexchange.com/questions/307580/up-arrow-for-history-does-not-work-over-ssh
