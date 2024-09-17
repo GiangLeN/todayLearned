@@ -1,3 +1,5 @@
 # Script to view html from virtual machine
 
+# 8000 is the input pore
+# 5000 is the output pore
 ssh -L 8080:localhost:5000 jesse@172.20.7.218
