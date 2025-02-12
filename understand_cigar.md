@@ -134,3 +134,24 @@ GAGTCCACAGAAAACCTTCCCTCCTGGCCCTCCCAGGTCCCCTGGTGAAATCAGAAGAGACGGTCATCCTGCAGTGCTGG
 AGTCCACAGAAAACCTTCCCTCCTGGCCCTCCCAGGTCCCCTGGTGAAATCAGAAGAGACGGTCATCCTGCAGTGCTGGTCAGATATCAAGTTTGGGCACTTCCTTCTGCACCAAGT
 >NHP00715|Mamu-KIR1D*006|837:71-189
 AGTCCACAGAAAACCTTCCCTCCTGGCCCTCCCAGGTCCCCTGGTGAAATCAGAAGAGACGGTCATCCTGCAGTGCTGGTCAGATATCAAGTTTGGGCACTTCCTTCTGCACCAAGTG
+
+
+
+Settings:
+Using cDNA to map to genome.
+
+Question: How much does different settings impact the ability to identify genes?
+
+Tests:
+
+-asm5
+Single hit preport out to multiple mapped lines. Short fragments could not recover to full length.
+
+
+
+
+
+
+
+If there is a deletion then it does not appear in the reference. Need to add that fragment to the extract coord.
+Vice versa if there is an insertion then its in the reference, for the extrac coord keep the same.
